@@ -15,6 +15,8 @@ int main() {
     std::stringstream buffer;
     buffer << file.rdbuf(); 
 
+    std::cout << "full file" << " " << buffer.str() << std::endl;
+
 
     std::vector<Token> tokens = tokenise(buffer.str());
 

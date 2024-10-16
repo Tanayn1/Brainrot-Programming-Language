@@ -46,9 +46,6 @@ std::vector<Token> tokenise(std::string code)
 
     std::vector<std::string> arr = split(code);
 
-   
-    
-
     for (int i = 0; i < arr.size(); i++)
     {
 
@@ -58,37 +55,42 @@ std::vector<Token> tokenise(std::string code)
          tokens.push_back(Token(arr[i], TokenType::PUNCTUATION));
       } else if (arr[i] == "+" || arr[i] == "-" || arr[i] == "/" || arr[i] == "" || arr[i] == "=") {
          tokens.push_back(Token(arr[i], TokenType::BINARYOPERATOR));
-      } else if (arr[i] == "") {
+      } else if (arr[i] == " " || arr[i] == "\n" || arr[i] == "\t") {
          tokens.push_back(Token(arr[i], TokenType::WHITESPACE));
       } else if (isAlpha(arr[i])) {
 
          std::string identifier = "";
 
-         while (arr[i] != " ") {
+         while (arr[i] != " " && arr[i] != ";" && i < arr.size()) {
             identifier += arr[i];
             i++;
          }
          Keywords keywordsHashmap = Keywords();
-
+         std::cout << "identifier:" << " " << identifier << std::endl;
          if (keywordsHashmap.check(identifier)) {
-            tokens.push_back(Token(identifier, TokenType::KEYWORD));
+            if (identifier == "fr" || identifier == "cap") {
+               tokens.push_back(Token(identifier, TokenType::BOOLEAN_LITERAL));
+            } else {
+               tokens.push_back(Token(identifier, TokenType::KEYWORD));
+            }
          } else {
-            tokens.push_back(Token(identifier, TokenType::LITERALS));
+            tokens.push_back(Token(identifier, TokenType::IDENTIFIERS));
          }
       } else if (isInt(arr[i])) {
-         tokens.push_back(Token(arr[i], TokenType::LITERALS));
+         tokens.push_back(Token(arr[i], TokenType::NUMERIC_LITERAL));
       } else if (arr[i] == "\"" || arr[i] == "'") {
          std::string string = "";
+         std::string quote = arr[i];  // Store the opening quote
          i += 1;
-         while (arr[i] != "\"" || arr[i] != "'") {
+         while (arr[i] != quote) {
             string += arr[i];
             i++;
          }
-         tokens.push_back(Token(string, TokenType::LITERALS));
+         tokens.push_back(Token(string, TokenType::STRING_LITERAL));
       } else if (arr[i] == ";") {
          tokens.push_back(Token(arr[i], TokenType::SEMICOLON));
       } else {
-         throw std::runtime_error("Uknown char " +  arr[i]);
+         throw std::runtime_error("Uknown char " + arr[i]);
       }
     }
 
