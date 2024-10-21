@@ -3,7 +3,7 @@
 #include "ASTNode.hpp"
 #include <iostream>
 
-class BinaryExpression : Node 
+class BinaryExpression : public Node 
 {
 
 public:
@@ -18,6 +18,13 @@ public:
     binaryOperator(op) 
     {
         type = NodeType::BINARY_EXPRESSION;
+    }
+
+    std::string print() override 
+    {
+        std::string printStatement = "Operator: " + binaryOperator;
+                                      
+        return printStatement;
     }
     
 };

@@ -1,0 +1,5 @@
+```
+c++ -std=c++11 ./src/main.cpp
+
+./a.out
+```

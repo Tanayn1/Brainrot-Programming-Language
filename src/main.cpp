@@ -3,6 +3,8 @@
 #include <sstream>
 #include "./include/lexer.hpp"
 #include "./include/token.hpp"
+#include "./include/parser.hpp"
+#include "./include/nodes/program.hpp"
 
 int main() {
     std::ifstream file("test.skibidi"); // Open the file
@@ -24,6 +26,13 @@ int main() {
     {
        std::cout << tokens[i].type << " " << tokens[i].value << std::endl;
     }
+
+    Parser parser = Parser(tokens);
+
+    Program program = parser.parse();
+
+    program.printBody();
+
     
 
     file.close(); 

@@ -56,7 +56,7 @@ std::vector<Token> tokenise(std::string code)
       } else if (arr[i] == "+" || arr[i] == "-" || arr[i] == "/" || arr[i] == "" || arr[i] == "=") {
          tokens.push_back(Token(arr[i], TokenType::BINARYOPERATOR));
       } else if (arr[i] == " " || arr[i] == "\n" || arr[i] == "\t") {
-         tokens.push_back(Token(arr[i], TokenType::WHITESPACE));
+         // tokens.push_back(Token(arr[i], TokenType::WHITESPACE));
       } else if (isAlpha(arr[i])) {
 
          std::string identifier = "";
