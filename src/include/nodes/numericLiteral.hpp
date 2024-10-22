@@ -11,6 +11,13 @@ public:
     {
         type = NodeType::NUMERIC_LITERAL_NODE;
     }
+
+    std::string print() override 
+    {
+        std::string printStatement = "Number: " + std::to_string(number);
+
+        return printStatement;
+    }
 };
 
 #endif

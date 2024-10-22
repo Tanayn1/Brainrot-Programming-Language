@@ -14,7 +14,7 @@ public:
 
     BinaryExpression(std::unique_ptr<Node> l, std::unique_ptr<Node> r, std::string op) : 
     left(std::move(l)), 
-    right(std::move(l)), 
+    right(std::move(r)), 
     binaryOperator(op) 
     {
         type = NodeType::BINARY_EXPRESSION;
@@ -22,8 +22,7 @@ public:
 
     std::string print() override 
     {
-        std::string printStatement = "Operator: " + binaryOperator;
-                                      
+        std::string printStatement = "Operator: " + binaryOperator + ", left: " + left->print() + ", right: " + right->print();                             
         return printStatement;
     }
     

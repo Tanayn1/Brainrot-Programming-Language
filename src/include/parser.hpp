@@ -58,7 +58,7 @@ private:
             std::string op = eat().value;
             std::unique_ptr<Node> right = parsePrimaryExpr();
             
-            left = std::make_unique<BinaryExpression>(left, right, op);
+            left = std::make_unique<BinaryExpression>(std::move(left), std::move(right), op);
         
         }
 
@@ -67,10 +67,14 @@ private:
 
     std::unique_ptr<Node> parseMultiplativeExpr() 
     {
-        std::unique_ptr<Node> left = parsePrimaryExpr();
+        std::unique_ptr<Node> left = parseAdditaveExpr();
 
         while (tokenArray[0].value == "*" || tokenArray[0].value == "/") 
         {
+            std::string op = eat().value;
+            std::unique_ptr<Node> right = parseAdditaveExpr();
+
+            left = std::make_unique<BinaryExpression>(std::move(left), std::move(right), op);
 
         }
 
@@ -85,7 +89,7 @@ public:
     {
         while (!tokenArray.empty()) 
         {
-            std::unique_ptr<Node> node = parseAdditaveExpr();
+            std::unique_ptr<Node> node = parseMultiplativeExpr();
 
             program->body.push_back(std::move(node));
         }

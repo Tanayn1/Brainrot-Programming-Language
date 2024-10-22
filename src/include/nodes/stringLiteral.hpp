@@ -12,6 +12,8 @@ public:
     {
         type = NodeType::STRING_LITERAL_NODE;
     }
+
+    
 };
 
 #endif

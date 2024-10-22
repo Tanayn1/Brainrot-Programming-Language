@@ -53,7 +53,7 @@ std::vector<Token> tokenise(std::string code)
 
       if (arr[i] == "{" || arr[i] == "}" || arr[i] == "," || arr[i] == "[" || arr[i] == "]") {
          tokens.push_back(Token(arr[i], TokenType::PUNCTUATION));
-      } else if (arr[i] == "+" || arr[i] == "-" || arr[i] == "/" || arr[i] == "" || arr[i] == "=") {
+      } else if (arr[i] == "+" || arr[i] == "-" || arr[i] == "/" || arr[i] == "*" || arr[i] == "=") {
          tokens.push_back(Token(arr[i], TokenType::BINARYOPERATOR));
       } else if (arr[i] == " " || arr[i] == "\n" || arr[i] == "\t") {
          // tokens.push_back(Token(arr[i], TokenType::WHITESPACE));
@@ -77,7 +77,14 @@ std::vector<Token> tokenise(std::string code)
             tokens.push_back(Token(identifier, TokenType::IDENTIFIERS));
          }
       } else if (isInt(arr[i])) {
-         tokens.push_back(Token(arr[i], TokenType::NUMERIC_LITERAL));
+         std::string number = "";
+         while (isInt(arr[i]) && i < arr.size()) 
+         {
+            number += arr[i];
+            i++;
+         }
+
+         tokens.push_back(Token(number, TokenType::NUMERIC_LITERAL));
       } else if (arr[i] == "\"" || arr[i] == "'") {
          std::string string = "";
          std::string quote = arr[i];  // Store the opening quote
