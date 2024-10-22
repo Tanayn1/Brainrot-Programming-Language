@@ -11,6 +11,7 @@
 #include "./nodes/numericLiteral.hpp"
 #include <stdlib.h>
 #include "./nodes/binaryExpression.hpp"
+#include <memory>
 
 class Parser 
 {
@@ -18,8 +19,8 @@ class Parser
 private:
     std::vector<Token> tokenArray;
 
-    Program program = Program({});
-
+    std::unique_ptr<Program> program = std::make_unique<Program>(std::vector<std::unique_ptr<Node>>());
+        
     Token eat() 
     {
         Token token = tokenArray[0];
@@ -28,66 +29,68 @@ private:
         return token;
     }
 
-    Node parsePrimaryExpr() 
+    std::unique_ptr<Node> parsePrimaryExpr() 
     {
         std::cout << "Parsing" << " " << tokenArray[0].value << std::endl;  
         switch (tokenArray[0].type)
         {
         case TokenType::NUMERIC_LITERAL:
         std::cout << "Parsing Numeric Literal" << " " << tokenArray[0].value << std::endl;  
-        return NumericLiteral(atoi(eat().value.c_str()));
+        return std::make_unique<NumericLiteral>(atoi(eat().value.c_str()));
         case TokenType::STRING_LITERAL:
             std::cout << "Parsing String Literal" << " " << tokenArray[0].value << std::endl;  
-            return StringLiteral(eat().value);
+            return std::make_unique<StringLiteral>(eat().value);
         case TokenType::BOOLEAN_LITERAL:
             std::cout << "Parsing Boolean Literal" << " " << tokenArray[0].value << std::endl;  
-            return Node();
+            return std::make_unique<Node>();
         default:
             throw std::runtime_error("Unrecongnised token " +  tokenArray[0].value);
         }
     }
 
-    Node parseAdditaveExpr() 
+    std::unique_ptr<Node> parseAdditaveExpr() 
     {
-        Node left = parsePrimaryExpr();
+        std::unique_ptr<Node> left = parsePrimaryExpr();
 
         while (tokenArray[0].value == "+" || tokenArray[0].value == "-") 
         {
             std::cout << "Parsing Additave Expression" << " " << tokenArray[0].value << std::endl;  
             std::string op = eat().value;
-            Node right = parsePrimaryExpr();
+            std::unique_ptr<Node> right = parsePrimaryExpr();
             
-            left = BinaryExpression(left, right, op);
+            left = std::make_unique<BinaryExpression>(left, right, op);
         
         }
 
         return left;
     }
 
-    Node parseMultiplativeExpr() 
+    std::unique_ptr<Node> parseMultiplativeExpr() 
     {
-        Node left = parsePrimaryExpr();
+        std::unique_ptr<Node> left = parsePrimaryExpr();
 
         while (tokenArray[0].value == "*" || tokenArray[0].value == "/") 
         {
 
         }
+
+        return left;
     }
 
 public:
 
     Parser(std::vector<Token> arr) : tokenArray(arr) {}
 
-    Program parse() 
+    std::unique_ptr<Program> parse() 
     {
-        while (tokenArray.size() > 0) 
+        while (!tokenArray.empty()) 
         {
-            Node body = parseAdditaveExpr();
+            std::unique_ptr<Node> node = parseAdditaveExpr();
 
-            program.body.push_back(body);
+            program->body.push_back(std::move(node));
         }
 
-        return program;
+        return std::move(program);
     };
 
 

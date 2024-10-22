@@ -5,6 +5,7 @@
 #include "./include/token.hpp"
 #include "./include/parser.hpp"
 #include "./include/nodes/program.hpp"
+#include <memory>
 
 int main() {
     std::ifstream file("test.skibidi"); // Open the file
@@ -29,9 +30,9 @@ int main() {
 
     Parser parser = Parser(tokens);
 
-    Program program = parser.parse();
+    std::unique_ptr<Program> program = parser.parse();
 
-    program.printBody();
+    program->printBody();
 
     
 

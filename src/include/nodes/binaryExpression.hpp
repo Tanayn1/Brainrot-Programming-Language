@@ -8,13 +8,13 @@ class BinaryExpression : public Node
 
 public:
 
-    Node left;
-    Node right;
+    std::unique_ptr<Node> left;
+    std::unique_ptr<Node> right;
     std::string binaryOperator;
 
-    BinaryExpression(Node l, Node r, std::string op) : 
-    left(l), 
-    right(r), 
+    BinaryExpression(std::unique_ptr<Node> l, std::unique_ptr<Node> r, std::string op) : 
+    left(std::move(l)), 
+    right(std::move(l)), 
     binaryOperator(op) 
     {
         type = NodeType::BINARY_EXPRESSION;

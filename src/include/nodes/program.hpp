@@ -3,14 +3,15 @@
 #include <iostream>
 #include "ASTNode.hpp"
 #include <vector>
+#include <memory>
 
 class Program : public Node
 {
 public:
 
-    std::vector<Node> body;
+    std::vector<std::unique_ptr<Node>> body;
 
-    Program(std::vector<Node> b) : body(b)
+    Program(std::vector<std::unique_ptr<Node>> b) : body(std::move(b))
     {
         type = NodeType::PROGRAM;
     };
@@ -19,7 +20,7 @@ public:
     {
         for (int i = 0; i < body.size(); i++)
         {
-            std::cout << body[i].print() << std::endl;
+            std::cout << body[i]->print() << std::endl;
         }
         
     }
